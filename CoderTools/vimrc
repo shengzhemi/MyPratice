@@ -1,0 +1,270 @@
+set nocompatible
+set ignorecase
+syntax on
+set number
+
+" isWindowsPC -- 判断系统
+let g:isWindowsPC=0
+if (has('win32') || has('win64') || has('win95') || has('win16'))
+	let g:isWindowsPC=1
+else
+	let g:isWindowsPC=0
+endif
+
+" GUI 默认最大化
+if has("gui_running")
+  " GUI is running or is about to start.
+  " Maximize gvim window (for an alternative on Windows, see simalt below).
+  set lines=999 columns=999
+else
+  " This is console Vim.
+  if exists("+lines")
+    set lines=50
+  endif
+  if exists("+columns")
+    set columns=100
+  endif
+endif
+
+"高亮选中行
+set cursorline
+"set cursorcolumn
+
+filetype off
+"设置Vundle初始化和相关的路径runtime path
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+"另外一种，可以指定vundle安装的路径
+"call vundle#bgin('~/.vim/bundle/')
+"1. 在Github上vim-scripts用户下的仓库,只需要写出repos（仓库）名称 
+"2. 在Github其他用户下的repos, 需要写出”用户名/repos名” 
+"3. 不在Github上的插件，需要写出git全路径
+
+"让vundle管理插件版本
+Plugin 'VundleVim/Vundle.vim'
+
+"文件导航NERDTree
+Plugin 'git@github.com:scrooloose/nerdtree.git'
+
+" vim-color-solarized --- 配色方案插件
+Plugin 'git@github.com:altercation/vim-colors-solarized.git'
+
+" tagbar --- 生成函数和变量列表的插件
+Plugin 'git@github.com:majutsushi/tagbar.git'
+
+" fugitive --- git plugin
+Plugin 'git@github.com:tpope/vim-fugitive.git'
+
+" commentary --- 代码注释插件
+Plugin 'git@github.com:tpope/vim-commentary.git'
+
+" syntastic --- 语法检查插件
+Plugin 'git@github.com:vim-syntastic/syntastic.git'
+
+" ultisnips -- 代码片段工具
+Plugin 'git@github.com:SirVer/ultisnips.git'
+Plugin 'honza/vim-snippets'
+
+" ctrip -- 目录文件搜索插件
+" Plugin 'git@github.com:kien/ctrlp.vim.git'
+
+" LeaderF -- 模糊文件查找插件
+Plugin 'git@github.com:Yggdroot/LeaderF.git'
+
+" delimitMate -- 自动补全括号插件
+Plugin 'git@github.com:Raimondi/delimitMate.git'
+
+" supertab -- tab键功能插件
+Plugin 'git@github.com:ervandew/supertab.git'
+
+" vim-surrond --- 替换文本的'外套'
+Plugin 'git@github.com:tpope/vim-surround.git'
+
+" buferexplorer -- 浏览buffer的插件
+Plugin 'git@github.com:vim-scripts/bufexplorer.zip.git'
+
+" a -- 切换cpp和.h文件的插件
+Plugin 'git@github.com:vim-scripts/a.vim.git'
+
+" clang_complete -- 代码补全插件
+"Plugin 'git@github.com:Rip-Rip/clang_complete.git'
+
+" neocomplcache -- 关键字补全插件
+"Plugin 'git@github.com:Shougo/neocomplcache'
+"Plugin 'git@github.com:osyo-manga/neocomplcache-clang_complete.git' " 解决clang_complete和neocomplcache的冲突
+
+" YouCompleteMe -- 代码补全插件
+Plugin 'git@github.com:Valloric/YouCompleteMe.git'
+
+" TagHighlight -- 变量、函数高亮插件
+Plugin 'git@github.com:magic-dot-files/TagHighlight.git'
+
+" powerline -- 增强状态栏
+Plugin 'git@github.com:Lokaltog/vim-powerline.git'
+
+" jedi-vim --- python补全插件
+Plugin 'git@github.com:davidhalter/jedi-vim.git'
+
+" 代码折叠
+Plugin 'git@github.com:tmhedberg/SimpylFold.git'
+
+"所有的插件必须在下面语句之前
+call vundle#end()
+filetype plugin indent on	"加载vim自带和插件x相应的语法文件类型相关脚本
+
+" ctags configuration
+let Tlist_Ctags_Cmd='/usr/local/bin/ctags'
+let Tlist_Show_one_file=1	"不同时显示多个文件的tag，只显示当前文件的
+let Tlist_Exit_OnlyWindow=1	"如果taglist窗口是最后一个窗口则退出VIM
+let Tlist_Use_leff_window=1	"在左侧窗口显示taglist
+
+" NERDTree configuration
+" map <c-n> :NERDTreeToggle<cr>
+map <F9> :NERDTreeToggle<cr>
+
+" vim-color-solarizedsyntax enbale
+syntax enable 
+set background=dark
+colorscheme solarized
+
+" tagbar configuration
+nmap <F10> :TagbarToggle<cr>
+
+" font 
+"set guifont=Monaco:h14
+set guifont=Ubuntu\ Mono:h16
+
+" ===== Quick Run ===
+" 按下F5自动编译运行
+map <F5> :call OnekeyRun()<cr>
+func! OnekeyRun()
+	exec 'w'
+	if &filetype == 'c'
+		exec "!g++ % -o %<"
+		exec "!time ./%<"
+	elseif &filetype == 'cpp'
+		exec "!g++ % -o %<"
+		exec "!time ./%<"
+	elseif &filetype == 'java'
+		exec "!java %"
+		exec "!time java %<"
+	elseif &filetype == 'sh'
+		exec "!time bash %"
+	elseif &filetype == 'python'
+		exec "!time python %"
+	elseif &filetype == 'html'
+		exec "!chrome % &"
+	endif
+endfunc
+" ===== End
+
+" vim-commentary configuration
+autocmd FileType python,shell set commentstring=#\ %s
+autocmd FileType java,c,cpp set commentstring=//\ %s
+
+" syntastic configuration
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" ultisnips configuration
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<c-e>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
+" ctrlp configuration
+"let g:ctrlp_map = '<c-p>'
+"let g:ctrlp_cmd = 'CtrlP'
+"let g:ctrlp_working_path_mode = 'ra'
+"if (isWindowsPC)
+"	set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+"	let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
+"else
+"	set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+"	let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
+"endif
+""设置搜索时忽略的文件
+"let g:ctrlp_custom_ignore = {
+"    \ 'dir':  '\v[\/]\.(git|hg|svn|rvm|eclipse)$',
+"    \ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz|pyc)$',
+"    \ }
+
+
+" leaderF configuration
+map <c-l> :LeaderfSelf<cr>
+map <c-p> :LeaderfFile<cr>
+let g:Lf_ShortcutF = '<C-P>'
+highlight Lf_hl_match gui=bold guifg=Blue cterm=bold ctermfg=21
+highlight Lf_hl_matchRefine  gui=bold guifg=Magenta cterm=bold ctermfg=201
+
+" delimitMate configuration
+au FileType python let b:delimitMate_nesting_quotes = ['"']
+
+" powerline configuration
+let g:Powerline_symbols = 'fancy'
+set encoding=utf-8
+set fillchars+=stl:\ ,stlnc:\
+" set -g default-terminal "screen-256color"
+set laststatus=2
+
+" 列举光标所在单词的列表
+" nmap <F2> :lvimgrep /<C-R>=expand("<cword>")/ % | lopen<cr><cr>
+" nmap <leader>lv :lv /<c-r>=expand("<cword>")<cr>/ %<cr>:lw<cr>
+nmap <F2> :lv /<c-r>=expand("<cword>")<cr>/ %<cr>:lw<cr>
+
+
+" youcompleteme configuration
+" let g:ycm_server_python_interpreter='/usr/bin/python'
+" let g:ycm_server_python_interpreter='/usr/locaol/bin/python'
+let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+" let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py' 
+
+" 代码折叠
+let g:SimpylFold_docstring_preview = 0
+nnoremap <space> za
+
+
+"代码缩进
+" au BufNewFile,BufRead *.py
+" 	\ set tabstop=4
+" 	\ set softtabstop=4
+" 	\ set shiftwidth=4
+" 	\ set textwidth=79
+" 	\ set expandtab
+" 	\ set autoindent
+" 	\ set fileformat=unix
+
+" au BufNewFile,BufRead *.js, *.html, *.css
+" 	\ set tabstop=2
+	" \ set softtabstop=2
+	" \ set shiftwidth=2
+
+" scope configuration
+" Cscope
+if has("cscope")
+  " set csprg=/usr/local/bin/cscope
+  set csto=1
+  set cst
+  set nocsverb
+  " add any database in current directory
+  if filereadable("cscope.out")
+      cs add cscope.out
+  endif
+  set csverb
+endif
+" nmap <leader>cs :cs find s <C-R>=expand("<cword>")<cr><cr>
+nmap <C-s>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-s>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-s>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-s>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-s>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-s>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-s>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-s>d :cs find d <C-R>=expand("<cword>")<CR><CR>
