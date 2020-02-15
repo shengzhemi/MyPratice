@@ -4,3 +4,4 @@ RemoteSystemsTempFiles/
 .classpath
 .project
 .recommenders
+*.out
