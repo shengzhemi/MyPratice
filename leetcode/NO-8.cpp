@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include <cstring>
 using namespace std;
-class Solution {
+class  MyAtoi{
 public:
     int myAtoi(string str) {
         int num = 0;
@@ -39,13 +39,13 @@ private:
     const static int minNum = -2147483648;
 };
 
-TEST(testsuit1, empty_value) {
-    Solution s;
+TEST(myatoitestsuit1, empty_value) {
+    MyAtoi s;
     EXPECT_EQ(0, s.myAtoi(""));
 }
 
-TEST(testsuit2, positive_value) {
-    Solution s;
+TEST(myatoitestsuit2, positive_value) {
+    MyAtoi s;
     EXPECT_EQ(23, s.myAtoi("23abc"));
     EXPECT_EQ(23, s.myAtoi("+23abc"));
     EXPECT_EQ(23, s.myAtoi("23abc123"));
@@ -59,8 +59,8 @@ TEST(testsuit2, positive_value) {
     EXPECT_EQ(2147483647, s.myAtoi("2147483647ecvd"));
 }
 
-TEST(testsuit3, negtive_value) {
-    Solution s;
+TEST(myatoitestsuit3, negtive_value) {
+    MyAtoi s;
     EXPECT_EQ(-23, s.myAtoi("-23"));
     EXPECT_EQ(-23, s.myAtoi("-23acv"));
     EXPECT_EQ(-23, s.myAtoi("-23acv123"));
@@ -69,8 +69,8 @@ TEST(testsuit3, negtive_value) {
     EXPECT_EQ(-2147483648, s.myAtoi("-2147483648cvf"));
 }
 
-TEST(testsuilt4, invalid_value) {
-    Solution s;
+TEST(myatoitestsuilt4, invalid_value) {
+    MyAtoi s;
     EXPECT_EQ(0, s.myAtoi("+"));
     EXPECT_EQ(0, s.myAtoi("++"));
     EXPECT_EQ(0, s.myAtoi("++55"));
@@ -82,14 +82,14 @@ TEST(testsuilt4, invalid_value) {
     EXPECT_EQ(0, s.myAtoi(" _d0122d"));
 }
 
-TEST(testsuit5, beyond_up_limit_value) {
-    Solution s;
+TEST(myatoitestsuit5, beyond_up_limit_value) {
+    MyAtoi s;
     EXPECT_EQ(2147483647, s.myAtoi("2147483648"));
     EXPECT_EQ(2147483647, s.myAtoi("21474836471"));
 }
 
-TEST(testsuit5, beyond_dowm_limit_value) {
-    Solution s;
+TEST(myatoitestsuit5, beyond_dowm_limit_value) {
+    MyAtoi s;
     EXPECT_EQ(-2147483648, s.myAtoi("-2147483649"));
     EXPECT_EQ(-2147483648, s.myAtoi("-21474836481"));
 }
