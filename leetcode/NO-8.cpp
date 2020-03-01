@@ -1,3 +1,6 @@
+#include "gtest/gtest.h"
+#include <cstring>
+using namespace std;
 class Solution {
 public:
     int myAtoi(string str) {
@@ -32,6 +35,61 @@ public:
         return num * sign;
     }
 private:
-    const int maxNum = 2147483647;
-    const int minNum = -2147483648;
+    const static int maxNum = 2147483647;
+    const static int minNum = -2147483648;
 };
+
+TEST(testsuit1, empty_value) {
+    Solution s;
+    EXPECT_EQ(0, s.myAtoi(""));
+}
+
+TEST(testsuit2, positive_value) {
+    Solution s;
+    EXPECT_EQ(23, s.myAtoi("23abc"));
+    EXPECT_EQ(23, s.myAtoi("+23abc"));
+    EXPECT_EQ(23, s.myAtoi("23abc123"));
+    EXPECT_EQ(23, s.myAtoi("   23abc123"));
+    EXPECT_EQ(1, s.myAtoi("1"));
+    EXPECT_EQ(0, s.myAtoi("0"));
+    EXPECT_EQ(0, s.myAtoi(" 0"));
+    EXPECT_EQ(0, s.myAtoi(" +0"));
+    EXPECT_EQ(2147483647, s.myAtoi("+2147483647"));
+    EXPECT_EQ(2147483647, s.myAtoi("  2147483647"));
+    EXPECT_EQ(2147483647, s.myAtoi("2147483647ecvd"));
+}
+
+TEST(testsuit3, negtive_value) {
+    Solution s;
+    EXPECT_EQ(-23, s.myAtoi("-23"));
+    EXPECT_EQ(-23, s.myAtoi("-23acv"));
+    EXPECT_EQ(-23, s.myAtoi("-23acv123"));
+    EXPECT_EQ(-2147483648, s.myAtoi("-2147483648"));
+    EXPECT_EQ(-2147483648, s.myAtoi(" -2147483648"));
+    EXPECT_EQ(-2147483648, s.myAtoi("-2147483648cvf"));
+}
+
+TEST(testsuilt4, invalid_value) {
+    Solution s;
+    EXPECT_EQ(0, s.myAtoi("+"));
+    EXPECT_EQ(0, s.myAtoi("++"));
+    EXPECT_EQ(0, s.myAtoi("++55"));
+    EXPECT_EQ(0, s.myAtoi("+ 55"));
+    EXPECT_EQ(0, s.myAtoi("abc"));
+    EXPECT_EQ(0, s.myAtoi(" dc123"));
+    EXPECT_EQ(0, s.myAtoi("--123"));
+    EXPECT_EQ(0, s.myAtoi("- 123"));
+    EXPECT_EQ(0, s.myAtoi(" _d0122d"));
+}
+
+TEST(testsuit5, beyond_up_limit_value) {
+    Solution s;
+    EXPECT_EQ(2147483647, s.myAtoi("2147483648"));
+    EXPECT_EQ(2147483647, s.myAtoi("21474836471"));
+}
+
+TEST(testsuit5, beyond_dowm_limit_value) {
+    Solution s;
+    EXPECT_EQ(-2147483648, s.myAtoi("-2147483649"));
+    EXPECT_EQ(-2147483648, s.myAtoi("-21474836481"));
+}

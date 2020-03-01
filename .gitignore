@@ -5,3 +5,6 @@ RemoteSystemsTempFiles/
 .project
 .recommenders
 *.out
+leetcode/gtest/
+leetcode/build/
+leetcode/mytest
